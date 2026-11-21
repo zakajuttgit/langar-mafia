@@ -1,1088 +1,1079 @@
 <!DOCTYPE html>
-<html lang="en" class="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Langar Mafia — Mess Tracker (Riyadh)</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      darkMode: 'class',
-      theme: {
-        extend: {
-          fontFamily: {
-            sans: ['Inter', 'sans-serif'],
-          },
-          colors: {
-            emeraldDeep: '#041f19',
-            emeraldCard: '#082f26',
-            emeraldBorder: '#134e3f',
-            goldAccent: '#f59e0b',
-            goldLight: '#fcd34d',
-          }
-        }
-      }
-    }
-  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Langar Mafia — Mess Tracker (Riyadh KSA)</title>
   <style>
+    :root {
+      --bg: #071912;
+      --panel: #0c261c;
+      --panel-2: #113325;
+      --border: rgba(52, 211, 153, 0.2);
+      --text: #ecfdf5;
+      --muted: #94b8a8;
+      --accent: #10b981;
+      --accent-2: #059669;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --info: #38bdf8;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
     body {
-      background-color: #031712;
-      color: #f8fafc;
-      font-family: 'Inter', sans-serif;
-      -webkit-tap-highlight-color: transparent;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+      background: radial-gradient(circle at top, #0d2e21 0%, var(--bg) 65%);
+      color: var(--text);
+      min-height: 100vh;
+      padding: 20px 14px 60px;
     }
-    /* Custom subtle scrollbar */
-    ::-webkit-scrollbar {
-      width: 6px;
-      height: 6px;
+
+    .container {
+      max-width: 920px;
+      margin: 0 auto;
     }
-    ::-webkit-scrollbar-track {
-      background: #041f19;
+
+    .topbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 18px;
     }
-    ::-webkit-scrollbar-thumb {
-      background: #134e3f;
-      border-radius: 9999px;
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
     }
-    .glass-panel {
-      background: rgba(8, 47, 38, 0.75);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(20, 83, 68, 0.7);
+
+    .brand-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #fbbf24, #f59e0b);
+      display: grid;
+      place-items: center;
+      font-size: 24px;
+      box-shadow: 0 8px 20px rgba(245, 158, 11, 0.25);
     }
-    .gold-glow {
-      box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.25);
+
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
     }
-    @keyframes fadeSlideUp {
-      from { opacity: 0; transform: translateY(10px); }
-      to { opacity: 1; transform: translateY(0); }
+
+    h1 {
+      font-size: 1.45rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
     }
-    .animate-entry {
-      animation: fadeSlideUp 0.25s ease-out forwards;
+
+    .pill {
+      font-size: 0.7rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(245, 158, 11, 0.16);
+      color: #fcd34d;
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      text-transform: uppercase;
+    }
+
+    .sync-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 8px var(--accent);
+    }
+
+    .dot.offline {
+      background: var(--warn);
+      box-shadow: 0 0 8px var(--warn);
+    }
+
+    .actions-top {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+      border: none;
+      border-radius: 11px;
+      font-weight: 600;
+      transition: transform 0.12s ease, opacity 0.15s ease, background 0.15s ease;
+    }
+
+    button:active { transform: scale(0.98); }
+
+    .btn-sync {
+      background: var(--panel-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px 14px;
+      font-size: 0.88rem;
+    }
+
+    .btn-sync:hover { background: #164230; }
+
+    .btn-settle {
+      background: linear-gradient(135deg, #f59e0b, #ea580c);
+      color: #fff;
+      padding: 11px 18px;
+      font-size: 0.94rem;
+      box-shadow: 0 8px 20px rgba(234, 88, 12, 0.28);
+    }
+
+    .btn-settle:hover { opacity: 0.94; }
+
+    .tabs {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .tab-btn {
+      padding: 13px 16px;
+      border-radius: 12px;
+      background: var(--panel);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      font-size: 0.95rem;
+    }
+
+    .tab-btn.active {
+      background: linear-gradient(135deg, var(--accent-2), #047857);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 8px 20px rgba(5, 150, 105, 0.25);
+    }
+
+    .summary-card {
+      background: linear-gradient(145deg, rgba(16, 185, 129, 0.14), rgba(12, 38, 28, 0.92));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 20px;
+      margin-bottom: 22px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.28);
+    }
+
+    .metric-label {
+      font-size: 0.78rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .metric-val {
+      font-size: 2rem;
+      font-weight: 800;
+    }
+
+    .metric-val .cur {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #6ee7b7;
+      margin-right: 4px;
+    }
+
+    .metric-val.share .cur {
+      color: #fcd34d;
+    }
+
+    .metric-sub {
+      font-size: 0.84rem;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .section-title {
+      font-size: 0.84rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      color: var(--muted);
+    }
+
+    .members-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .member-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+    }
+
+    .member-top {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .avatar {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: rgba(16, 185, 129, 0.16);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #6ee7b7;
+      display: grid;
+      place-items: center;
+      font-weight: 800;
+    }
+
+    .member-name {
+      font-size: 1.05rem;
+      font-weight: 700;
+    }
+
+    .member-paid-label {
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+
+    .member-paid-val {
+      font-size: 1.45rem;
+      font-weight: 800;
+      margin: 4px 0 12px;
+    }
+
+    .bal-pill {
+      display: inline-block;
+      width: 100%;
+      text-align: center;
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .bal-even {
+      background: rgba(148, 184, 168, 0.12);
+      color: var(--muted);
+    }
+
+    .bal-credit {
+      background: rgba(16, 185, 129, 0.18);
+      color: #6ee7b7;
+      border: 1px solid rgba(16, 185, 129, 0.35);
+    }
+
+    .bal-owe {
+      background: rgba(239, 68, 68, 0.16);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .card-box {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 2fr 1fr auto;
+      gap: 12px;
+      align-items: end;
+    }
+
+    label {
+      display: block;
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+      font-weight: 600;
+    }
+
+    select, input {
+      width: 100%;
+      padding: 11px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(52, 211, 153, 0.25);
+      background: var(--bg);
+      color: var(--text);
+      font-family: inherit;
+      font-size: 0.94rem;
+    }
+
+    select:focus, input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .btn-add {
+      background: var(--accent);
+      color: #042016;
+      padding: 11px 18px;
+      font-size: 0.94rem;
+      white-space: nowrap;
+    }
+
+    .btn-add:hover { background: #34d399; }
+
+    .expense-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .expense-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 13px 15px;
+      border-radius: 12px;
+      background: var(--bg);
+      border: 1px solid rgba(52, 211, 153, 0.14);
+    }
+
+    .exp-main {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .exp-title {
+      font-weight: 700;
+      font-size: 0.96rem;
+    }
+
+    .exp-meta {
+      font-size: 0.8rem;
+      color: var(--muted);
+    }
+
+    .exp-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .exp-amount {
+      font-weight: 800;
+      color: #6ee7b7;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+
+    .btn-del {
+      background: rgba(239, 68, 68, 0.14);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.28);
+      padding: 6px 10px;
+      font-size: 0.8rem;
+      border-radius: 8px;
+    }
+
+    .btn-del:hover { background: rgba(239, 68, 68, 0.28); }
+
+    .empty-state {
+      text-align: center;
+      padding: 28px 16px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.72);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 50;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      width: 100%;
+      max-width: 560px;
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 22px;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+
+    .modal-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+    }
+
+    .modal-head h2 { font-size: 1.2rem; }
+
+    .btn-close {
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--text);
+      padding: 6px 11px;
+      border-radius: 8px;
+    }
+
+    .transfer-box {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin: 14px 0;
+    }
+
+    .transfer-item {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+      font-size: 0.94rem;
+    }
+
+    .transfer-item:last-child { border-bottom: none; }
+
+    .modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .btn-copy {
+      background: #0284c7;
+      color: #fff;
+      padding: 11px 15px;
+      font-size: 0.9rem;
+      flex: 1;
+    }
+
+    .btn-archive {
+      background: var(--accent);
+      color: #042016;
+      padding: 11px 15px;
+      font-size: 0.9rem;
+      flex: 1;
+    }
+
+    .archive-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .archive-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      right: 20px;
+      background: #065f46;
+      color: #ecfdf5;
+      border: 1px solid rgba(110, 231, 183, 0.4);
+      padding: 11px 16px;
+      border-radius: 11px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.2s ease;
+      z-index: 100;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @media (max-width: 720px) {
+      .summary-card, .members-grid, .form-grid {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
-<body class="min-h-screen pb-24 selection:bg-amber-500 selection:text-emerald-950">
+<body>
+  <div class="container">
+    <div class="topbar">
+      <div class="brand">
+        <div class="brand-badge">🍲</div>
+        <div>
+          <div class="title-row">
+            <h1>Langar Mafia</h1>
+            <span class="pill">Riyadh KSA</span>
+          </div>
+          <div class="sync-status">
+            <span class="dot" id="syncDot"></span>
+            <span id="syncText">Connecting to Supabase live sync...</span>
+          </div>
+        </div>
+      </div>
+      <div class="actions-top">
+        <button class="btn-sync" id="btnSync" onclick="syncFromCloud(true)">↻ Sync Now</button>
+        <button class="btn-settle" onclick="openSettleModal()">🧮 Settle Month</button>
+      </div>
+    </div>
 
-  <!-- Top App Header -->
-  <header class="sticky top-0 z-30 bg-[#031712]/90 backdrop-blur-md border-b border-emerald-900/70">
-    <div class="max-w-2xl mx-auto px-4 py-3.5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-2xl bg-gradient-to-br from-amber-400 to-amber-600 flex items-center justify-center text-emerald-950 font-extrabold text-xl shadow-lg">
-          🍲
+    <div class="tabs">
+      <button class="tab-btn active" id="tabActiveBtn" onclick="switchTab('active')">📊 Active Mess</button>
+      <button class="tab-btn" id="tabPastBtn" onclick="switchTab('past')">📜 Past Months (<span id="pastCount">0</span>)</button>
+    </div>
+
+    <div id="activeView">
+      <div class="summary-card">
+        <div>
+          <div class="metric-label">Total Mess Spend</div>
+          <div class="metric-val"><span class="cur">SAR</span><span id="totalSpend">0.00</span></div>
+          <div class="metric-sub" id="itemCountSub">0 items logged this cycle</div>
         </div>
         <div>
-          <div class="flex items-center gap-2">
-            <h1 class="text-lg font-extrabold tracking-tight text-white">Langar Mafia</h1>
-            <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
-              Riyadh KSA
-            </span>
-          </div>
-          <p class="text-xs text-emerald-300/80 flex items-center gap-1.5">
-            <span id="syncDot" class="w-2 h-2 rounded-full bg-amber-400 animate-pulse"></span>
-            <span id="syncStatusText">Connecting live sync...</span>
-          </p>
+          <div class="metric-label">Per-Head Share (÷ 4)</div>
+          <div class="metric-val share"><span class="cur">SAR</span><span id="perHeadShare">0.00</span></div>
+          <div class="metric-sub">Equal split • 4 roommates</div>
         </div>
       </div>
 
-      <!-- Settle Month Trigger Button -->
-      <button id="openSettleBtn" class="px-3.5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 active:scale-95 transition text-emerald-950 font-bold text-xs sm:text-sm shadow-md flex items-center gap-1.5">
-        <span>🧮</span>
-        <span>Settle Month</span>
-      </button>
-    </div>
-
-    <!-- Navigation Tabs -->
-    <div class="max-w-2xl mx-auto px-4 flex gap-2 pb-2.5">
-      <button data-tab="dashboard" class="tab-btn flex-1 py-2 rounded-xl text-xs sm:text-sm font-semibold transition bg-emerald-800/80 text-white border border-emerald-600/60 shadow-sm">
-        📊 Active Mess
-      </button>
-      <button data-tab="history" class="tab-btn flex-1 py-2 rounded-xl text-xs sm:text-sm font-semibold transition text-emerald-300/80 hover:bg-emerald-900/40 border border-transparent">
-        📜 Past Months (<span id="archiveCountBadge">0</span>)
-      </button>
-    </div>
-  </header>
-
-  <!-- Main Container -->
-  <main class="max-w-2xl mx-auto px-4 pt-4 space-y-5">
-
-    <!-- ==================== TAB 1: ACTIVE MESS DASHBOARD ==================== -->
-    <section id="tab-dashboard" class="space-y-5">
-
-      <!-- Hero Totals Banner -->
-      <div class="glass-panel rounded-3xl p-5 gold-glow relative overflow-hidden">
-        <div class="absolute -right-8 -top-8 w-32 h-32 rounded-full bg-amber-500/10 blur-2xl pointer-events-none"></div>
-        <div class="grid grid-cols-2 gap-4 divide-x divide-emerald-800/80">
-          <div>
-            <p class="text-xs font-medium uppercase tracking-wider text-emerald-300/80">Total Mess Spend</p>
-            <div class="mt-1 flex items-baseline gap-1.5">
-              <span class="text-xs font-bold text-amber-400">SAR</span>
-              <span id="totalSpendDisplay" class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">0.00</span>
-            </div>
-            <p id="totalItemsCount" class="text-[11px] text-emerald-400/80 mt-1">0 items logged this cycle</p>
-          </div>
-          <div class="pl-4">
-            <p class="text-xs font-medium uppercase tracking-wider text-emerald-300/80">Per-Head Share (÷ 4)</p>
-            <div class="mt-1 flex items-baseline gap-1.5">
-              <span class="text-xs font-bold text-amber-400">SAR</span>
-              <span id="perHeadDisplay" class="text-2xl sm:text-3xl font-extrabold text-amber-300 tracking-tight">0.00</span>
-            </div>
-            <p class="text-[11px] text-emerald-400/80 mt-1">Equal split • 4 roommates</p>
-          </div>
-        </div>
+      <div class="section-head">
+        <div class="section-title">Roommate Balances (Live)</div>
+        <div style="font-size: 0.8rem; color: var(--muted);">+ Gets back • - Owes</div>
       </div>
+      <div class="members-grid" id="membersGrid"></div>
 
-      <!-- 4 Roommate Cards Grid -->
-      <div>
-        <div class="flex items-center justify-between mb-2.5 px-1">
-          <h2 class="text-xs font-bold uppercase tracking-wider text-emerald-300">Roommate Balances (Live)</h2>
-          <span class="text-[11px] text-emerald-400/80">+ Gets back • - Owes</span>
-        </div>
-        <div id="membersGrid" class="grid grid-cols-2 gap-3">
-          <!-- Populated dynamically via JS -->
-        </div>
-      </div>
-
-      <!-- Quick Add Expense Card -->
-      <div class="glass-panel rounded-3xl p-5 space-y-4">
-        <div class="flex items-center justify-between">
-          <h2 class="text-base font-bold text-white flex items-center gap-2">
-            <span class="w-7 h-7 rounded-lg bg-amber-500/20 text-amber-400 flex items-center justify-center text-sm">➕</span>
-            Add Mess Expense
-          </h2>
-          <span class="text-xs text-emerald-300/70">Syncs instantly</span>
-        </div>
-
-        <form id="expenseForm" class="space-y-3.5">
-          <!-- Who Paid Pills -->
+      <div class="card-box">
+        <div class="section-title" style="margin-bottom: 14px;">Add Mess Expense</div>
+        <form class="form-grid" onsubmit="handleAddExpense(event)">
           <div>
-            <label class="block text-xs font-semibold text-emerald-200 mb-1.5">Who Paid?</label>
-            <div class="grid grid-cols-4 gap-2" id="payerSelector">
-              <button type="button" data-member="Umar" class="payer-pill py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold border transition bg-amber-500 text-emerald-950 border-amber-400 shadow">
-                Umar
-              </button>
-              <button type="button" data-member="Yaseen" class="payer-pill py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold border transition bg-emerald-950/70 text-emerald-200 border-emerald-800 hover:border-emerald-600">
-                Yaseen
-              </button>
-              <button type="button" data-member="Zaka" class="payer-pill py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold border transition bg-emerald-950/70 text-emerald-200 border-emerald-800 hover:border-emerald-600">
-                Zaka
-              </button>
-              <button type="button" data-member="Tahir" class="payer-pill py-2.5 px-2 rounded-xl text-xs sm:text-sm font-bold border transition bg-emerald-950/70 text-emerald-200 border-emerald-800 hover:border-emerald-600">
-                Tahir
-              </button>
-            </div>
-            <input type="hidden" id="selectedMemberInput" value="Umar" />
+            <label for="payerSelect">Paid By</label>
+            <select id="payerSelect" required>
+              <option value="Umar">Umar</option>
+              <option value="Yaseen">Yaseen</option>
+              <option value="Zaka">Zaka</option>
+              <option value="Tahir">Tahir</option>
+            </select>
           </div>
-
-          <!-- Quick Presets for Desi/Riyadh Mess -->
           <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <label for="itemInput" class="text-xs font-semibold text-emerald-200">Item / Description</label>
-              <span class="text-[11px] text-emerald-400/70">Tap quick tags:</span>
-            </div>
-            <div class="flex flex-wrap gap-1.5 mb-2">
-              <button type="button" class="quick-tag px-2.5 py-1 rounded-lg bg-emerald-900/70 hover:bg-emerald-800 text-[11px] text-emerald-200 border border-emerald-700/60 transition">🍗 Chicken</button>
-              <button type="button" class="quick-tag px-2.5 py-1 rounded-lg bg-emerald-900/70 hover:bg-emerald-800 text-[11px] text-emerald-200 border border-emerald-700/60 transition">🍚 Rice & Daal</button>
-              <button type="button" class="quick-tag px-2.5 py-1 rounded-lg bg-emerald-900/70 hover:bg-emerald-800 text-[11px] text-emerald-200 border border-emerald-700/60 transition">🥬 Vegetables</button>
-              <button type="button" class="quick-tag px-2.5 py-1 rounded-lg bg-emerald-900/70 hover:bg-emerald-800 text-[11px] text-emerald-200 border border-emerald-700/60 transition">🔥 Gas Cylinder</button>
-              <button type="button" class="quick-tag px-2.5 py-1 rounded-lg bg-emerald-900/70 hover:bg-emerald-800 text-[11px] text-emerald-200 border border-emerald-700/60 transition">💧 Water Gallon</button>
-              <button type="button" class="quick-tag px-2.5 py-1 rounded-lg bg-emerald-900/70 hover:bg-emerald-800 text-[11px] text-emerald-200 border border-emerald-700/60 transition">🛒 Othaim / Panda</button>
-            </div>
-            <input
-              type="text"
-              id="itemInput"
-              required
-              placeholder="e.g., Chicken 2kg, Onions, Cooking Oil..."
-              class="w-full px-3.5 py-3 rounded-xl bg-emerald-950/90 border border-emerald-800 text-white placeholder-emerald-500/70 text-sm focus:outline-none focus:border-amber-400 transition"
-            />
+            <label for="itemInput">Item / Description</label>
+            <input id="itemInput" type="text" placeholder="e.g., Daal Chawal, Chicken, Groceries" required />
           </div>
-
-          <!-- Amount & Date Row -->
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label for="amountInput" class="block text-xs font-semibold text-emerald-200 mb-1.5">Amount (SAR)</label>
-              <div class="relative">
-                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-xs font-bold text-amber-400">SAR</span>
-                <input
-                  type="number"
-                  id="amountInput"
-                  step="0.01"
-                  min="0.01"
-                  required
-                  placeholder="0.00"
-                  class="w-full pl-12 pr-3.5 py-3 rounded-xl bg-emerald-950/90 border border-emerald-800 text-white font-bold placeholder-emerald-600 text-sm focus:outline-none focus:border-amber-400 transition"
-                />
-              </div>
-            </div>
-
-            <div>
-              <label for="dateInput" class="block text-xs font-semibold text-emerald-200 mb-1.5">Date</label>
-              <input
-                type="date"
-                id="dateInput"
-                required
-                class="w-full px-3 py-3 rounded-xl bg-emerald-950/90 border border-emerald-800 text-white text-sm focus:outline-none focus:border-amber-400 transition"
-              />
-            </div>
+          <div>
+            <label for="amountInput">Amount (SAR)</label>
+            <input id="amountInput" type="number" step="0.01" min="0.01" placeholder="0.00" required />
           </div>
-
-          <button
-            type="submit"
-            id="submitExpenseBtn"
-            class="w-full py-3.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 active:scale-[0.99] text-emerald-950 font-extrabold text-sm shadow-lg transition flex items-center justify-center gap-2"
-          >
-            <span>Add to Langar Khata</span>
-            <span>➔</span>
-          </button>
+          <button type="submit" class="btn-add">+ Add Expense</button>
         </form>
       </div>
 
-      <!-- Expense History Log -->
-      <div class="space-y-3">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-1">
-          <h2 class="text-sm font-bold text-white flex items-center gap-2">
-            <span>🧾 Expense History Log</span>
-          </h2>
-          <!-- Member Filter Pills -->
-          <div class="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0" id="filterBar">
-            <button data-filter="All" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500 text-emerald-950 transition">All</button>
-            <button data-filter="Umar" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900/70 text-emerald-200 hover:bg-emerald-800 transition">Umar</button>
-            <button data-filter="Yaseen" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900/70 text-emerald-200 hover:bg-emerald-800 transition">Yaseen</button>
-            <button data-filter="Zaka" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900/70 text-emerald-200 hover:bg-emerald-800 transition">Zaka</button>
-            <button data-filter="Tahir" class="filter-btn px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-900/70 text-emerald-200 hover:bg-emerald-800 transition">Tahir</button>
-          </div>
+      <div class="card-box">
+        <div class="section-head">
+          <div class="section-title">Logged Expenses This Month</div>
+          <div style="font-size: 0.8rem; color: var(--muted);" id="expenseCountLabel">0 entries</div>
         </div>
-
-        <div id="expenseList" class="space-y-2.5">
-          <!-- Populated dynamically -->
-        </div>
+        <div class="expense-list" id="expenseList"></div>
       </div>
+    </div>
 
-      <!-- Bottom Prominent End Month Action -->
-      <div class="pt-2 pb-6">
-        <button id="bottomSettleBtn" class="w-full py-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-400 to-amber-500 hover:brightness-105 active:scale-[0.99] text-emerald-950 font-extrabold text-sm sm:text-base shadow-xl transition flex items-center justify-center gap-2">
-          <span>🏁 End Mess & Calculate Month Settlement</span>
-        </button>
-        <p class="text-center text-[11px] text-emerald-400/70 mt-2">
-          Calculates exact averages, "Who Pays Whom" transfers & WhatsApp receipt
-        </p>
+    <div id="pastView" style="display: none;">
+      <div id="pastMonthsList"></div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="settleModal">
+    <div class="modal">
+      <div class="modal-head">
+        <h2>Month-End Settlement (÷ 4)</h2>
+        <button class="btn-close" onclick="closeSettleModal()">✕</button>
       </div>
-    </section>
-
-    <!-- ==================== TAB 2: PAST MONTHS ARCHIVE ==================== -->
-    <section id="tab-history" class="hidden space-y-4">
-      <div class="glass-panel rounded-2xl p-4 flex items-center justify-between">
-        <div>
-          <h2 class="text-base font-bold text-white">Archived Mess Cycles</h2>
-          <p class="text-xs text-emerald-300/80">Closed monthly settlements for Langar Mafia</p>
-        </div>
-        <span class="text-2xl">📚</span>
-      </div>
-
-      <div id="archiveList" class="space-y-4">
-        <!-- Populated dynamically -->
-      </div>
-    </section>
-
-  </main>
-
-  <!-- ==================== SETTLEMENT & END MONTH MODAL ==================== -->
-  <div id="settlementModal" class="fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-4">
-    <div class="bg-[#06241d] border border-emerald-700/80 w-full max-w-lg rounded-t-3xl sm:rounded-3xl max-h-[92vh] flex flex-col shadow-2xl animate-entry">
-      
-      <!-- Modal Header -->
-      <div class="px-5 py-4 border-b border-emerald-800/80 flex items-center justify-between">
-        <div>
-          <span class="text-[10px] font-bold uppercase tracking-widest text-amber-400">Langar Mafia • Final Hisab</span>
-          <h3 class="text-lg font-extrabold text-white">Month-End Settlement</h3>
-        </div>
-        <button id="closeSettleModalBtn" class="w-9 h-9 rounded-full bg-emerald-900/80 hover:bg-emerald-800 text-emerald-200 flex items-center justify-center text-lg font-bold">
-          ✕
-        </button>
-      </div>
-
-      <!-- Modal Scrollable Content -->
-      <div class="p-5 overflow-y-auto space-y-5 flex-1">
-        
-        <!-- Summary Box -->
-        <div class="grid grid-cols-2 gap-3 bg-emerald-950/90 p-4 rounded-2xl border border-emerald-800">
-          <div>
-            <span class="text-[11px] text-emerald-300/80 block">Total Mess Spend</span>
-            <span id="modalTotalSpend" class="text-xl font-extrabold text-white">SAR 0.00</span>
-          </div>
-          <div>
-            <span class="text-[11px] text-emerald-300/80 block">Per-Head Average (÷4)</span>
-            <span id="modalPerHead" class="text-xl font-extrabold text-amber-400">SAR 0.00</span>
-          </div>
-        </div>
-
-        <!-- Individual Breakdown -->
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-emerald-300 mb-2">Individual Paid vs Share</h4>
-          <div id="modalMemberBreakdown" class="space-y-2">
-            <!-- Populated via JS -->
-          </div>
-        </div>
-
-        <!-- Who Pays Whom Transfers -->
-        <div>
-          <h4 class="text-xs font-bold uppercase tracking-wider text-amber-400 mb-2">💸 Who Pays Whom (Minimum Transfers)</h4>
-          <div id="modalTransfersList" class="space-y-2">
-            <!-- Populated via JS -->
-          </div>
-        </div>
-
-        <!-- WhatsApp Copy Action -->
-        <div class="pt-1">
-          <button id="copyWhatsappBtn" class="w-full py-3.5 rounded-xl bg-[#25D366] hover:bg-[#20bd5a] active:scale-[0.99] text-emerald-950 font-extrabold text-sm shadow-lg transition flex items-center justify-center gap-2">
-            <span>📋 Copy WhatsApp Group Summary</span>
-          </button>
-        </div>
-
-        <!-- Archive & Start New Month Section -->
-        <div class="border-t border-emerald-800/80 pt-4 space-y-3">
-          <div class="flex items-center justify-between">
-            <h4 class="text-xs font-bold uppercase tracking-wider text-rose-300">Close Current Month & Reset</h4>
-            <span class="text-[11px] text-emerald-400/70">Saves to Past Months</span>
-          </div>
-          <div class="flex gap-2">
-            <input
-              type="text"
-              id="cycleLabelInput"
-              placeholder="e.g., November 2026"
-              class="flex-1 px-3.5 py-2.5 rounded-xl bg-emerald-950 border border-emerald-800 text-white text-sm focus:outline-none focus:border-amber-400"
-            />
-            <button id="triggerArchiveBtn" class="px-4 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 active:scale-95 text-white font-bold text-xs sm:text-sm whitespace-nowrap transition">
-              Archive & Reset
-            </button>
-          </div>
-        </div>
+      <div id="settleSummaryBody"></div>
+      <div class="modal-actions">
+        <button class="btn-copy" onclick="copyWhatsAppSummary()">📋 Copy WhatsApp Summary</button>
+        <button class="btn-archive" onclick="archiveAndResetMonth()">📦 Archive &amp; Reset Month</button>
       </div>
     </div>
   </div>
 
-  <!-- ==================== CUSTOM CONFIRMATION DIALOG ==================== -->
-  <div id="confirmDialog" class="fixed inset-0 z-[60] hidden items-center justify-center bg-black/80 backdrop-blur-sm p-4">
-    <div class="bg-[#082f26] border border-emerald-700 max-w-sm w-full rounded-3xl p-5 space-y-4 shadow-2xl animate-entry">
-      <div class="flex items-center gap-3">
-        <div id="confirmIcon" class="w-10 h-10 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl">
-          ⚠️
-        </div>
-        <div>
-          <h3 id="confirmTitle" class="text-base font-bold text-white">Are you sure?</h3>
-          <p id="confirmMessage" class="text-xs text-emerald-200/80 mt-0.5">This action cannot be undone.</p>
-        </div>
-      </div>
-      <div class="flex gap-2.5 pt-1">
-        <button id="confirmCancelBtn" class="flex-1 py-2.5 rounded-xl bg-emerald-900 hover:bg-emerald-800 text-emerald-200 font-semibold text-sm transition">
-          Cancel
-        </button>
-        <button id="confirmProceedBtn" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white font-bold text-sm transition">
-          Confirm
-        </button>
-      </div>
-    </div>
-  </div>
+  <div class="toast" id="toast"></div>
 
-  <!-- ==================== TOAST NOTIFICATION ==================== -->
-  <div id="toast" class="fixed bottom-5 left-1/2 -translate-x-1/2 z-[70] hidden px-4 py-3 rounded-2xl bg-amber-400 text-emerald-950 font-bold text-xs sm:text-sm shadow-2xl items-center gap-2 whitespace-nowrap">
-    <span id="toastIcon">✅</span>
-    <span id="toastMsg">Done!</span>
-  </div>
+  <script>
+    const MEMBERS = ["Umar", "Yaseen", "Zaka", "Tahir"];
+    const SUPABASE_URL = "https://zuahgqemakcolavenxbl.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_HS7tflaJ_wd73zjLPcGXTQ_cYJjkJOf";
+    const ROW_ID = "langar-mafia";
+    const LOCAL_KEY = "langar_mafia_mess_state_v1";
 
-  <!-- ==================== FIREBASE & APP LOGIC ==================== -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-    import { getFirestore, collection, doc, addDoc, deleteDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+    let state = {
+      expenses: [],
+      pastMonths: [],
+      updated_at: null
+    };
 
-    // Roommates Configuration
-    const MEMBERS = [
-      { name: 'Umar', badgeBg: 'bg-sky-500/20 text-sky-300 border-sky-500/30', avatarBg: 'from-sky-400 to-blue-600' },
-      { name: 'Yaseen', badgeBg: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/30', avatarBg: 'from-emerald-400 to-teal-600' },
-      { name: 'Zaka', badgeBg: 'bg-amber-500/20 text-amber-300 border-amber-500/30', avatarBg: 'from-amber-400 to-orange-600' },
-      { name: 'Tahir', badgeBg: 'bg-purple-500/20 text-purple-300 border-purple-500/30', avatarBg: 'from-purple-400 to-indigo-600' }
-    ];
+    let lastWhatsAppText = "";
 
-    // App State
-    let expenses = [];
-    let archives = [];
-    let currentFilter = 'All';
-    let currentUser = null;
-    let db = null;
-    let appId = typeof __app_id !== 'undefined' ? __app_id : 'langar-mafia-riyadh';
-
-    // DOM References
-    const syncDot = document.getElementById('syncDot');
-    const syncStatusText = document.getElementById('syncStatusText');
-    const totalSpendDisplay = document.getElementById('totalSpendDisplay');
-    const perHeadDisplay = document.getElementById('perHeadDisplay');
-    const totalItemsCount = document.getElementById('totalItemsCount');
-    const membersGrid = document.getElementById('membersGrid');
-    const expenseList = document.getElementById('expenseList');
-    const archiveList = document.getElementById('archiveList');
-    const archiveCountBadge = document.getElementById('archiveCountBadge');
-    const dateInput = document.getElementById('dateInput');
-    const cycleLabelInput = document.getElementById('cycleLabelInput');
-
-    // Set default dates
-    function setTodayDate() {
-      const now = new Date();
-      const yyyy = now.getFullYear();
-      const mm = String(now.getMonth() + 1).padStart(2, '0');
-      const dd = String(now.getDate()).padStart(2, '0');
-      dateInput.value = `${yyyy}-${mm}-${dd}`;
-
-      const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-      cycleLabelInput.value = `${monthNames[now.getMonth()]} ${yyyy}`;
-    }
-    setTodayDate();
-
-    // Formatting Helpers
-    function formatSAR(num) {
-      return Number(num || 0).toLocaleString('en-US', {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      });
+    function showToast(msg) {
+      const el = document.getElementById("toast");
+      el.textContent = msg;
+      el.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => el.classList.remove("show"), 2600);
     }
 
-    function escapeHTML(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
+    function setSyncIndicator(live, text) {
+      const dot = document.getElementById("syncDot");
+      const label = document.getElementById("syncText");
+      dot.classList.toggle("offline", !live);
+      label.textContent = text;
     }
 
-    // Toast Helper
-    let toastTimer;
-    function showToast(msg, icon = '✅') {
-      const toast = document.getElementById('toast');
-      document.getElementById('toastMsg').textContent = msg;
-      document.getElementById('toastIcon').textContent = icon;
-      toast.classList.remove('hidden');
-      toast.classList.add('flex');
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => {
-        toast.classList.add('hidden');
-        toast.classList.remove('flex');
-      }, 3000);
+    function saveLocal() {
+      try {
+        localStorage.setItem(LOCAL_KEY, JSON.stringify(state));
+      } catch (_) {}
     }
 
-    // Custom Confirmation Dialog Helper
-    function showConfirm({ title, message, confirmText = 'Confirm', icon = '⚠️' }) {
-      return new Promise((resolve) => {
-        const dialog = document.getElementById('confirmDialog');
-        document.getElementById('confirmTitle').textContent = title;
-        document.getElementById('confirmMessage').textContent = message;
-        document.getElementById('confirmIcon').textContent = icon;
-        const proceedBtn = document.getElementById('confirmProceedBtn');
-        const cancelBtn = document.getElementById('confirmCancelBtn');
-        proceedBtn.textContent = confirmText;
-
-        dialog.classList.remove('hidden');
-        dialog.classList.add('flex');
-
-        const cleanup = (result) => {
-          dialog.classList.add('hidden');
-          dialog.classList.remove('flex');
-          proceedBtn.onclick = null;
-          cancelBtn.onclick = null;
-          resolve(result);
-        };
-
-        proceedBtn.onclick = () => cleanup(true);
-        cancelBtn.onclick = () => cleanup(false);
-      });
-    }
-
-    // Core Math: Calculate Balances & Minimum Transfers
-    function calculateMessStats(expenseItems) {
-      const totals = { Umar: 0, Yaseen: 0, Zaka: 0, Tahir: 0 };
-      let totalSpend = 0;
-
-      expenseItems.forEach(item => {
-        const amt = parseFloat(item.amount) || 0;
-        if (totals.hasOwnProperty(item.member)) {
-          totals[item.member] += amt;
+    function loadLocal() {
+      try {
+        const raw = localStorage.getItem(LOCAL_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          state = {
+            expenses: Array.isArray(parsed.expenses) ? parsed.expenses : [],
+            pastMonths: Array.isArray(parsed.pastMonths) ? parsed.pastMonths : [],
+            updated_at: parsed.updated_at || null
+          };
         }
-        totalSpend += amt;
-      });
+      } catch (_) {}
+    }
 
-      const perHead = totalSpend / 4;
+    async function syncFromCloud(manual = false) {
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/mess_state?id=eq.${encodeURIComponent(ROW_ID)}&select=data,updated_at`,
+          {
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${SUPABASE_KEY}`,
+              "Cache-Control": "no-cache"
+            }
+          }
+        );
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const rows = await res.json();
+        if (Array.isArray(rows) && rows.length > 0 && rows[0].data) {
+          const d = rows[0].data;
+          state = {
+            expenses: Array.isArray(d.expenses) ? d.expenses : [],
+            pastMonths: Array.isArray(d.pastMonths) ? d.pastMonths : [],
+            updated_at: rows[0].updated_at || new Date().toISOString()
+          };
+          saveLocal();
+          renderAll();
+          setSyncIndicator(true, "Live synced via Supabase • All 4 devices");
+          if (manual) showToast("Synced with group cloud!");
+        } else {
+          await pushToCloud(manual);
+        }
+      } catch (err) {
+        loadLocal();
+        renderAll();
+        setSyncIndicator(false, "Local cache mode (check Supabase connection)");
+        if (manual) showToast("Could not reach cloud — showing local cache");
+      }
+    }
+
+    async function pushToCloud(showMsg = false) {
+      state.updated_at = new Date().toISOString();
+      saveLocal();
+      try {
+        const res = await fetch(
+          `${SUPABASE_URL}/rest/v1/mess_state?id=eq.${encodeURIComponent(ROW_ID)}`,
+          {
+            method: "PATCH",
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${SUPABASE_KEY}`,
+              "Content-Type": "application/json",
+              "Prefer": "return=representation"
+            },
+            body: JSON.stringify({
+              data: {
+                expenses: state.expenses,
+                pastMonths: state.pastMonths
+              },
+              updated_at: state.updated_at
+            })
+          }
+        );
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        const updated = await res.json();
+        if (!Array.isArray(updated) || updated.length === 0) {
+          await fetch(`${SUPABASE_URL}/rest/v1/mess_state`, {
+            method: "POST",
+            headers: {
+              "apikey": SUPABASE_KEY,
+              "Authorization": `Bearer ${SUPABASE_KEY}`,
+              "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+              id: ROW_ID,
+              data: {
+                expenses: state.expenses,
+                pastMonths: state.pastMonths
+              },
+              updated_at: state.updated_at
+            })
+          });
+        }
+        setSyncIndicator(true, "Live synced via Supabase • All 4 devices");
+        if (showMsg) showToast("Saved to group cloud!");
+      } catch (err) {
+        setSyncIndicator(false, "Saved locally • Will retry cloud sync");
+        if (showMsg) showToast("Saved locally (offline retry pending)");
+      }
+    }
+
+    function calculateTotals(expenses) {
+      const paidBy = { Umar: 0, Yaseen: 0, Zaka: 0, Tahir: 0 };
+      let total = 0;
+      for (const exp of expenses) {
+        const amt = Number(exp.amount) || 0;
+        total += amt;
+        if (paidBy[exp.payer] !== undefined) {
+          paidBy[exp.payer] += amt;
+        }
+      }
+      const perHead = total / 4;
       const balances = {};
-      MEMBERS.forEach(m => {
-        balances[m.name] = totals[m.name] - perHead;
-      });
+      for (const m of MEMBERS) {
+        balances[m] = paidBy[m] - perHead;
+      }
+      return { total, perHead, paidBy, balances };
+    }
 
-      // Greedy Minimum Transfers Algorithm ("Who Pays Whom")
+    function computeTransfers(balances) {
       const debtors = [];
       const creditors = [];
-
-      MEMBERS.forEach(m => {
-        const net = Math.round(balances[m.name] * 100) / 100;
-        if (net < -0.01) {
-          debtors.push({ name: m.name, amount: Math.abs(net) });
-        } else if (net > 0.01) {
-          creditors.push({ name: m.name, amount: net });
-        }
-      });
-
+      for (const m of MEMBERS) {
+        const net = Math.round((balances[m] || 0) * 100) / 100;
+        if (net < -0.01) debtors.push({ person: m, amount: Math.abs(net) });
+        else if (net > 0.01) creditors.push({ person: m, amount: net });
+      }
       debtors.sort((a, b) => b.amount - a.amount);
       creditors.sort((a, b) => b.amount - a.amount);
 
       const transfers = [];
       let i = 0, j = 0;
       while (i < debtors.length && j < creditors.length) {
-        const payAmt = Math.min(debtors[i].amount, creditors[j].amount);
-        if (payAmt > 0.01) {
+        const pay = Math.min(debtors[i].amount, creditors[j].amount);
+        const rounded = Math.round(pay * 100) / 100;
+        if (rounded > 0) {
           transfers.push({
-            from: debtors[i].name,
-            to: creditors[j].name,
-            amount: Math.round(payAmt * 100) / 100
+            from: debtors[i].person,
+            to: creditors[j].person,
+            amount: rounded
           });
         }
-        debtors[i].amount = Math.round((debtors[i].amount - payAmt) * 100) / 100;
-        creditors[j].amount = Math.round((creditors[j].amount - payAmt) * 100) / 100;
-
-        if (debtors[i].amount <= 0.01) i++;
-        if (creditors[j].amount <= 0.01) j++;
+        debtors[i].amount -= pay;
+        creditors[j].amount -= pay;
+        if (debtors[i].amount < 0.01) i++;
+        if (creditors[j].amount < 0.01) j++;
       }
-
-      return { totalSpend, perHead, totals, balances, transfers };
+      return transfers;
     }
 
-    // Render Active Dashboard
-    function renderDashboard() {
-      const { totalSpend, perHead, totals, balances } = calculateMessStats(expenses);
+    function formatSar(num) {
+      return (Number(num) || 0).toFixed(2);
+    }
 
-      totalSpendDisplay.textContent = formatSAR(totalSpend);
-      perHeadDisplay.textContent = formatSAR(perHead);
-      totalItemsCount.textContent = `${expenses.length} ${expenses.length === 1 ? 'item' : 'items'} logged this cycle`;
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
 
-      // Render 4 Roommate Cards
-      membersGrid.innerHTML = MEMBERS.map(m => {
-        const spent = totals[m.name];
-        const net = balances[m.name];
-        const isPositive = net >= 0.005;
-        const isNegative = net <= -0.005;
+    function renderAll() {
+      const { total, perHead, paidBy, balances } = calculateTotals(state.expenses);
 
-        let netText = 'Settled (0.00)';
-        let netBadgeClass = 'bg-emerald-900/80 text-emerald-300 border-emerald-700/60';
-        if (isPositive) {
-          netText = `+SAR ${formatSAR(net)}`;
-          netBadgeClass = 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40';
-        } else if (isNegative) {
-          netText = `-SAR ${formatSAR(Math.abs(net))}`;
-          netBadgeClass = 'bg-rose-500/20 text-rose-300 border-rose-500/40';
+      document.getElementById("totalSpend").textContent = formatSar(total);
+      document.getElementById("perHeadShare").textContent = formatSar(perHead);
+      document.getElementById("itemCountSub").textContent =
+        `${state.expenses.length} ${state.expenses.length === 1 ? "item" : "items"} logged this cycle`;
+      document.getElementById("expenseCountLabel").textContent =
+        `${state.expenses.length} ${state.expenses.length === 1 ? "entry" : "entries"}`;
+      document.getElementById("pastCount").textContent = state.pastMonths.length;
+
+      const grid = document.getElementById("membersGrid");
+      grid.innerHTML = MEMBERS.map((name) => {
+        const paid = paidBy[name] || 0;
+        const bal = balances[name] || 0;
+        let pillClass = "bal-even";
+        let pillText = `Settled (0.00)`;
+        if (bal > 0.01) {
+          pillClass = "bal-credit";
+          pillText = `+ Gets back SAR ${formatSar(bal)}`;
+        } else if (bal < -0.01) {
+          pillClass = "bal-owe";
+          pillText = `- Owes SAR ${formatSar(Math.abs(bal))}`;
         }
-
         return `
-          <div class="glass-panel rounded-2xl p-3.5 flex flex-col justify-between space-y-2.5 border border-emerald-800/80">
-            <div class="flex items-center justify-between">
-              <div class="flex items-center gap-2">
-                <div class="w-7 h-7 rounded-full bg-gradient-to-br ${m.avatarBg} flex items-center justify-center text-white font-extrabold text-xs shadow">
-                  ${m.name[0]}
-                </div>
-                <span class="font-bold text-sm text-white">${m.name}</span>
-              </div>
-            </div>
-            <div>
-              <span class="text-[10px] uppercase tracking-wider text-emerald-400/80 block">Paid so far</span>
-              <span class="text-base sm:text-lg font-extrabold text-white">SAR ${formatSAR(spent)}</span>
-            </div>
-            <div class="pt-0.5">
-              <span class="inline-block w-full text-center px-2 py-1 rounded-lg text-[11px] font-bold border ${netBadgeClass}">
-                ${netText}
-              </span>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      renderExpenseList();
-    }
-
-    // Render Filtered Expense History Log
-    function renderExpenseList() {
-      const filtered = currentFilter === 'All'
-        ? expenses
-        : expenses.filter(e => e.member === currentFilter);
-
-      // Sort newest first by date, then createdAt
-      const sorted = [...filtered].sort((a, b) => {
-        if (b.date !== a.date) return (b.date || '').localeCompare(a.date || '');
-        return (b.createdAt || 0) - (a.createdAt || 0);
-      });
-
-      if (sorted.length === 0) {
-        expenseList.innerHTML = `
-          <div class="glass-panel rounded-2xl p-8 text-center space-y-2">
-            <div class="text-3xl">🍽️</div>
-            <p class="text-sm font-semibold text-emerald-200">No expenses logged ${currentFilter !== 'All' ? `for ${currentFilter}` : 'yet'}</p>
-            <p class="text-xs text-emerald-400/70">Add chicken, groceries, water, or gas above to start tracking.</p>
-          </div>
-        `;
-        return;
-      }
-
-      expenseList.innerHTML = sorted.map(item => {
-        const memberCfg = MEMBERS.find(m => m.name === item.member) || MEMBERS[0];
-        return `
-          <div class="glass-panel rounded-2xl p-3.5 flex items-center justify-between gap-3 animate-entry hover:border-emerald-700 transition">
-            <div class="flex items-center gap-3 min-w-0">
-              <span class="px-2.5 py-1 rounded-xl text-xs font-bold border shrink-0 ${memberCfg.badgeBg}">
-                ${escapeHTML(item.member)}
-              </span>
-              <div class="min-w-0">
-                <p class="text-sm font-semibold text-white truncate">${escapeHTML(item.item)}</p>
-                <p class="text-[11px] text-emerald-400/80">${escapeHTML(item.date || '')}</p>
-              </div>
-            </div>
-            <div class="flex items-center gap-2.5 shrink-0">
-              <div class="text-right">
-                <span class="text-[10px] font-bold text-amber-400 block leading-none">SAR</span>
-                <span class="text-sm sm:text-base font-extrabold text-white">${formatSAR(item.amount)}</span>
-              </div>
-              <button
-                data-delete-id="${item.id}"
-                title="Delete entry"
-                class="delete-expense-btn w-8 h-8 rounded-xl bg-rose-500/10 hover:bg-rose-500/25 text-rose-400 flex items-center justify-center text-xs transition"
-              >
-                🗑️
-              </button>
-            </div>
-          </div>
-        `;
-      }).join('');
-
-      // Attach delete listeners
-      document.querySelectorAll('.delete-expense-btn').forEach(btn => {
-        btn.addEventListener('click', async () => {
-          const id = btn.getAttribute('data-delete-id');
-          const target = expenses.find(e => e.id === id);
-          if (!target) return;
-
-          const confirmed = await showConfirm({
-            title: 'Delete Expense?',
-            message: `Remove "${target.item}" (SAR ${formatSAR(target.amount)}) paid by ${target.member}?`,
-            confirmText: 'Delete',
-            icon: '🗑️'
-          });
-
-          if (confirmed && db && currentUser) {
-            try {
-              await deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mess_expenses', id));
-              showToast('Expense removed', '🗑️');
-            } catch (err) {
-              console.error(err);
-              showToast('Failed to delete expense', '❌');
-            }
-          }
-        });
-      });
-    }
-
-    // Render Past Months Archive
-    function renderArchives() {
-      archiveCountBadge.textContent = archives.length;
-      const sortedArchives = [...archives].sort((a, b) => (b.archivedAt || 0) - (a.archivedAt || 0));
-
-      if (sortedArchives.length === 0) {
-        archiveList.innerHTML = `
-          <div class="glass-panel rounded-2xl p-8 text-center space-y-2">
-            <div class="text-3xl">🗂️</div>
-            <p class="text-sm font-semibold text-emerald-200">No archived months yet</p>
-            <p class="text-xs text-emerald-400/70">When you click "Settle Month" and "Archive & Reset", closed months appear here.</p>
-          </div>
-        `;
-        return;
-      }
-
-      archiveList.innerHTML = sortedArchives.map(arc => {
-        const totals = arc.totals || {};
-        const transfers = arc.transfers || [];
-        const dateStr = arc.archivedAt ? new Date(arc.archivedAt).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }) : '';
-
-        return `
-          <div class="glass-panel rounded-3xl p-4 sm:p-5 space-y-3.5 border border-emerald-800">
-            <div class="flex items-start justify-between border-b border-emerald-800/80 pb-3">
+          <div class="member-card">
+            <div class="member-top">
+              <div class="avatar">${name[0]}</div>
               <div>
-                <span class="px-2 py-0.5 rounded-md bg-amber-500/20 text-amber-300 text-[10px] font-bold uppercase">Closed Cycle</span>
-                <h3 class="text-base font-extrabold text-white mt-1">${escapeHTML(arc.label || 'Past Month')}</h3>
-                <p class="text-[11px] text-emerald-400/80">Settled on ${dateStr} • ${arc.itemCount || 0} items</p>
-              </div>
-              <div class="text-right">
-                <span class="text-[11px] text-emerald-300/80 block">Total / Per Head</span>
-                <span class="text-sm font-extrabold text-white">SAR ${formatSAR(arc.totalSpend)}</span>
-                <span class="text-xs font-bold text-amber-400 block">SAR ${formatSAR(arc.perHead)} / head</span>
+                <div class="member-name">${name}</div>
+                <div class="member-paid-label">Paid So Far</div>
               </div>
             </div>
-
-            <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
-              ${MEMBERS.map(m => `
-                <div class="bg-emerald-950/80 rounded-xl p-2 border border-emerald-800/70">
-                  <span class="text-[11px] text-emerald-300 block">${m.name}</span>
-                  <span class="text-xs font-bold text-white">SAR ${formatSAR(totals[m.name] || 0)}</span>
-                </div>
-              `).join('')}
-            </div>
-
-            <div class="bg-emerald-950/60 rounded-xl p-3 space-y-1.5">
-              <p class="text-[11px] font-bold uppercase tracking-wider text-amber-400">Settlement Transfers:</p>
-              ${transfers.length === 0
-                ? `<p class="text-xs text-emerald-300">Everyone was already balanced!</p>`
-                : transfers.map(t => `
-                    <p class="text-xs text-emerald-100 flex items-center justify-between">
-                      <span><strong>${escapeHTML(t.from)}</strong> ➔ <strong>${escapeHTML(t.to)}</strong></span>
-                      <span class="font-bold text-amber-300">SAR ${formatSAR(t.amount)}</span>
-                    </p>
-                  `).join('')
-              }
-            </div>
+            <div class="member-paid-val">SAR ${formatSar(paid)}</div>
+            <div class="bal-pill ${pillClass}">${pillText}</div>
           </div>
         `;
-      }).join('');
+      }).join("");
+
+      const listEl = document.getElementById("expenseList");
+      if (!state.expenses.length) {
+        listEl.innerHTML = `<div class="empty-state">No expenses logged yet. Add groceries or langar items above!</div>`;
+      } else {
+        listEl.innerHTML = [...state.expenses].reverse().map((exp) => `
+          <div class="expense-item">
+            <div class="exp-main">
+              <div class="exp-title">${escapeHtml(exp.item)}</div>
+              <div class="exp-meta">Paid by <strong>${escapeHtml(exp.payer)}</strong> • ${escapeHtml(exp.date || "")}</div>
+            </div>
+            <div class="exp-right">
+              <div class="exp-amount">SAR ${formatSar(exp.amount)}</div>
+              <button class="btn-del" onclick="deleteExpense('${escapeHtml(exp.id)}')">Delete</button>
+            </div>
+          </div>
+        `).join("");
+      }
+
+      renderPastMonths();
     }
 
-    // Open & Populate Month-End Settlement Modal
-    function openSettlementModal() {
-      const { totalSpend, perHead, totals, balances, transfers } = calculateMessStats(expenses);
+    async function handleAddExpense(e) {
+      e.preventDefault();
+      const payer = document.getElementById("payerSelect").value;
+      const item = document.getElementById("itemInput").value.trim();
+      const amount = parseFloat(document.getElementById("amountInput").value);
+      if (!item || isNaN(amount) || amount <= 0) return;
 
-      document.getElementById('modalTotalSpend').textContent = `SAR ${formatSAR(totalSpend)}`;
-      document.getElementById('modalPerHead').textContent = `SAR ${formatSAR(perHead)}`;
+      const now = new Date();
+      const dateStr = now.toLocaleString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        hour: "2-digit",
+        minute: "2-digit"
+      });
 
-      // Member Breakdown
-      document.getElementById('modalMemberBreakdown').innerHTML = MEMBERS.map(m => {
-        const paid = totals[m.name];
-        const net = balances[m.name];
-        const isPos = net >= 0.005;
-        const isNeg = net <= -0.005;
+      state.expenses.push({
+        id: "exp_" + Date.now() + "_" + Math.random().toString(36).slice(2, 6),
+        payer,
+        item,
+        amount: Math.round(amount * 100) / 100,
+        date: dateStr
+      });
+
+      document.getElementById("itemInput").value = "";
+      document.getElementById("amountInput").value = "";
+      renderAll();
+      await pushToCloud(true);
+    }
+
+    async function deleteExpense(id) {
+      state.expenses = state.expenses.filter((e) => e.id !== id);
+      renderAll();
+      await pushToCloud(true);
+    }
+
+    function switchTab(tab) {
+      const isActive = tab === "active";
+      document.getElementById("activeView").style.display = isActive ? "block" : "none";
+      document.getElementById("pastView").style.display = isActive ? "none" : "block";
+      document.getElementById("tabActiveBtn").classList.toggle("active", isActive);
+      document.getElementById("tabPastBtn").classList.toggle("active", !isActive);
+    }
+
+    function openSettleModal() {
+      const { total, perHead, paidBy, balances } = calculateTotals(state.expenses);
+      const transfers = computeTransfers(balances);
+
+      const memberLines = MEMBERS.map((m) => {
+        const b = balances[m] || 0;
+        const status = b > 0.01 ? `(+${formatSar(b)} SAR)` : b < -0.01 ? `(-${formatSar(Math.abs(b))} SAR)` : `(Settled)`;
+        return `• ${m}: Paid SAR ${formatSar(paidBy[m])} ${status}`;
+      }).join("<br>");
+
+      const transferHtml = transfers.length
+        ? transfers.map((t) => `<div class="transfer-item">💸 <strong>${t.from}</strong> pays <strong>${t.to}</strong> → <strong>SAR ${formatSar(t.amount)}</strong></div>`).join("")
+        : `<div class="transfer-item">✅ Everyone is already settled up!</div>`;
+
+      document.getElementById("settleSummaryBody").innerHTML = `
+        <p style="color: var(--muted); font-size: 0.9rem; margin-bottom: 12px;">
+          Total Mess Spend: <strong style="color: var(--text);">SAR ${formatSar(total)}</strong> •
+          Per-Head Average (÷ 4): <strong style="color: #fcd34d;">SAR ${formatSar(perHead)}</strong>
+        </p>
+        <div style="font-size: 0.88rem; line-height: 1.7; margin-bottom: 12px;">${memberLines}</div>
+        <div class="transfer-box">
+          <div class="section-title" style="margin-bottom: 6px;">Who Pays Whom</div>
+          ${transferHtml}
+        </div>
+      `;
+
+      const waTransfers = transfers.length
+        ? transfers.map((t) => `• ${t.from} → ${t.to}: SAR ${formatSar(t.amount)}`).join("
+")
+        : "• All settled!";
+
+      lastWhatsAppText =
+`🍲 *Langar Mafia Mess Settlement (Riyadh)*
+Total Spend: *SAR ${formatSar(total)}*
+Per Head (÷ 4): *SAR ${formatSar(perHead)}*
+
+*Paid So Far:*
+• Umar: SAR ${formatSar(paidBy.Umar)}
+• Yaseen: SAR ${formatSar(paidBy.Yaseen)}
+• Zaka: SAR ${formatSar(paidBy.Zaka)}
+• Tahir: SAR ${formatSar(paidBy.Tahir)}
+
+*Who Pays Whom:*
+${waTransfers}`;
+
+      document.getElementById("settleModal").classList.add("open");
+    }
+
+    function closeSettleModal() {
+      document.getElementById("settleModal").classList.remove("open");
+    }
+
+    async function copyWhatsAppSummary() {
+      if (!lastWhatsAppText) return;
+      try {
+        await navigator.clipboard.writeText(lastWhatsAppText);
+        showToast("Copied WhatsApp summary!");
+      } catch (_) {
+        const ta = document.createElement("textarea");
+        ta.value = lastWhatsAppText;
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        showToast("Copied WhatsApp summary!");
+      }
+    }
+
+    async function archiveAndResetMonth() {
+      if (!state.expenses.length) {
+        showToast("No active expenses to archive");
+        return;
+      }
+      const { total, perHead, paidBy, balances } = calculateTotals(state.expenses);
+      const transfers = computeTransfers(balances);
+      const monthLabel = new Date().toLocaleDateString("en-GB", {
+        day: "2-digit",
+        month: "short",
+        year: "numeric"
+      });
+
+      state.pastMonths.unshift({
+        id: "m_" + Date.now(),
+        closedOn: monthLabel,
+        total,
+        perHead,
+        paidBy,
+        transfers,
+        itemCount: state.expenses.length,
+        expenses: [...state.expenses]
+      });
+      state.expenses = [];
+      closeSettleModal();
+      renderAll();
+      await pushToCloud(true);
+      switchTab("past");
+    }
+
+    function renderPastMonths() {
+      const container = document.getElementById("pastMonthsList");
+      if (!state.pastMonths.length) {
+        container.innerHTML = `<div class="card-box"><div class="empty-state">No settled months archived yet. Click "Settle Month" whenever you close a cycle.</div></div>`;
+        return;
+      }
+
+      container.innerHTML = state.pastMonths.map((m) => {
+        const tLines = (m.transfers && m.transfers.length)
+          ? m.transfers.map((t) => `<div>• <strong>${escapeHtml(t.from)}</strong> pays <strong>${escapeHtml(t.to)}</strong>: <strong>SAR ${formatSar(t.amount)}</strong></div>`).join("")
+          : `<div>• Settled evenly</div>`;
 
         return `
-          <div class="flex items-center justify-between bg-emerald-950/70 px-3.5 py-2.5 rounded-xl border border-emerald-800/70">
-            <div>
-              <span class="text-sm font-bold text-white">${m.name}</span>
-              <span class="text-[11px] text-emerald-400 block">Paid: SAR ${formatSAR(paid)}</span>
+          <div class="archive-card">
+            <div class="archive-top">
+              <strong>Settled on ${escapeHtml(m.closedOn)}</strong>
+              <span style="color: #6ee7b7; font-weight: 700;">Total: SAR ${formatSar(m.total)} • Per Head: SAR ${formatSar(m.perHead)}</span>
             </div>
-            <div class="text-right">
-              ${isPos ? `<span class="text-xs font-extrabold text-emerald-400">Gets Back: SAR ${formatSAR(net)}</span>` : ''}
-              ${isNeg ? `<span class="text-xs font-extrabold text-rose-400">To Pay: SAR ${formatSAR(Math.abs(net))}</span>` : ''}
-              ${!isPos && !isNeg ? `<span class="text-xs font-bold text-emerald-300">Settled (0.00)</span>` : ''}
+            <div style="font-size: 0.86rem; color: var(--muted); margin-bottom: 8px;">
+              Umar: SAR ${formatSar(m.paidBy?.Umar)} | Yaseen: SAR ${formatSar(m.paidBy?.Yaseen)} | Zaka: SAR ${formatSar(m.paidBy?.Zaka)} | Tahir: SAR ${formatSar(m.paidBy?.Tahir)}
             </div>
+            <div style="font-size: 0.9rem; line-height: 1.6;">${tLines}</div>
           </div>
         `;
-      }).join('');
-
-      // Transfers List
-      const transfersEl = document.getElementById('modalTransfersList');
-      if (transfers.length === 0) {
-        transfersEl.innerHTML = `
-          <div class="bg-emerald-950/70 p-3.5 rounded-xl border border-emerald-800 text-center text-xs text-emerald-200">
-            ✅ No transfers needed — everyone is completely squared up!
-          </div>
-        `;
-      } else {
-        transfersEl.innerHTML = transfers.map(t => `
-          <div class="flex items-center justify-between bg-amber-500/10 border border-amber-500/30 px-3.5 py-3 rounded-xl">
-            <div class="flex items-center gap-2 text-sm">
-              <span class="font-bold text-rose-300">${t.from}</span>
-              <span class="text-amber-400 font-bold">pays ➔</span>
-              <span class="font-bold text-emerald-300">${t.to}</span>
-            </div>
-            <span class="text-sm font-extrabold text-amber-300">SAR ${formatSAR(t.amount)}</span>
-          </div>
-        `).join('');
-      }
-
-      const modal = document.getElementById('settlementModal');
-      modal.classList.remove('hidden');
-      modal.classList.add('flex');
+      }).join("");
     }
 
-    function closeSettlementModal() {
-      const modal = document.getElementById('settlementModal');
-      modal.classList.add('hidden');
-      modal.classList.remove('flex');
-    }
-
-    // Generate Formatted WhatsApp Summary Text
-    function buildWhatsAppReceipt() {
-      const { totalSpend, perHead, totals, balances, transfers } = calculateMessStats(expenses);
-      const label = cycleLabelInput.value.trim() || 'Current Month';
-
-      let text = `🍲 *LANGAR MAFIA — MESS HISAB (${label})* 🇸🇦\n`;
-      text += `━━━━━━━━━━━━━━━━━━━━\n`;
-      text += `💰 *Total Spend:* SAR ${formatSAR(totalSpend)}\n`;
-      text += `👥 *Per-Head Share (÷4):* SAR ${formatSAR(perHead)}\n`;
-      text += `🧾 *Total Entries:* ${expenses.length}\n\n`;
-
-      text += `📊 *INDIVIDUAL SUMMARY:*\n`;
-      MEMBERS.forEach(m => {
-        const paid = totals[m.name];
-        const net = balances[m.name];
-        let status = 'Settled ✅';
-        if (net >= 0.005) status = `Gets back +SAR ${formatSAR(net)} 🟢`;
-        else if (net <= -0.005) status = `Owes -SAR ${formatSAR(Math.abs(net))} 🔴`;
-        text += `• *${m.name}:* Paid SAR ${formatSAR(paid)} (${status})\n`;
-      });
-
-      text += `\n💸 *FINAL SETTLEMENT (WHO PAYS WHOM):*\n`;
-      if (transfers.length === 0) {
-        text += `• Everyone is equal! No transfers needed. 🤝\n`;
-      } else {
-        transfers.forEach(t => {
-          text += `👉 *${t.from}* pays *${t.to}* ➔ *SAR ${formatSAR(t.amount)}*\n`;
-        });
-      }
-      text += `━━━━━━━━━━━━━━━━━━━━\n`;
-      text += `_Generated via Langar Mafia Riyadh Mess Tracker_`;
-      return text;
-    }
-
-    // Copy to Clipboard using execCommand fallback for iframe compatibility
-    function copyTextToClipboard(text) {
-      const textarea = document.createElement('textarea');
-      textarea.value = text;
-      textarea.style.position = 'fixed';
-      textarea.style.opacity = '0';
-      document.body.appendChild(textarea);
-      textarea.select();
-      try {
-        document.execCommand('copy');
-        showToast('WhatsApp summary copied! Paste in group.', '📋');
-      } catch (err) {
-        console.error('Copy failed', err);
-        showToast('Could not copy text', '❌');
-      }
-      document.body.removeChild(textarea);
-    }
-
-    // ==================== UI EVENT LISTENERS ====================
-
-    // Tab Switching
-    document.querySelectorAll('.tab-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const target = btn.getAttribute('data-tab');
-        document.querySelectorAll('.tab-btn').forEach(b => {
-          b.classList.remove('bg-emerald-800/80', 'text-white', 'border-emerald-600/60', 'shadow-sm');
-          b.classList.add('text-emerald-300/80', 'border-transparent');
-        });
-        btn.classList.add('bg-emerald-800/80', 'text-white', 'border-emerald-600/60', 'shadow-sm');
-        btn.classList.remove('text-emerald-300/80', 'border-transparent');
-
-        document.getElementById('tab-dashboard').classList.toggle('hidden', target !== 'dashboard');
-        document.getElementById('tab-history').classList.toggle('hidden', target !== 'history');
-      });
-    });
-
-    // Payer Pill Selector
-    document.querySelectorAll('.payer-pill').forEach(pill => {
-      pill.addEventListener('click', () => {
-        const member = pill.getAttribute('data-member');
-        document.getElementById('selectedMemberInput').value = member;
-
-        document.querySelectorAll('.payer-pill').forEach(p => {
-          p.classList.remove('bg-amber-500', 'text-emerald-950', 'border-amber-400', 'shadow');
-          p.classList.add('bg-emerald-950/70', 'text-emerald-200', 'border-emerald-800');
-        });
-        pill.classList.add('bg-amber-500', 'text-emerald-950', 'border-amber-400', 'shadow');
-        pill.classList.remove('bg-emerald-950/70', 'text-emerald-200', 'border-emerald-800');
-      });
-    });
-
-    // Quick Item Tags
-    document.querySelectorAll('.quick-tag').forEach(tag => {
-      tag.addEventListener('click', () => {
-        const itemInput = document.getElementById('itemInput');
-        const cleanText = tag.textContent.replace(/^[^\w\s]+\s*/, '').trim();
-        itemInput.value = cleanText;
-        document.getElementById('amountInput').focus();
-      });
-    });
-
-    // Filter Buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        currentFilter = btn.getAttribute('data-filter');
-        document.querySelectorAll('.filter-btn').forEach(b => {
-          b.classList.remove('bg-amber-500', 'text-emerald-950', 'font-bold');
-          b.classList.add('bg-emerald-900/70', 'text-emerald-200', 'font-semibold');
-        });
-        btn.classList.add('bg-amber-500', 'text-emerald-950', 'font-bold');
-        btn.classList.remove('bg-emerald-900/70', 'text-emerald-200', 'font-semibold');
-        renderExpenseList();
-      });
-    });
-
-    // Add Expense Form Submit
-    document.getElementById('expenseForm').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      if (!db || !currentUser) {
-        showToast('Still connecting to live database...', '⏳');
-        return;
-      }
-
-      const member = document.getElementById('selectedMemberInput').value;
-      const item = document.getElementById('itemInput').value.trim();
-      const amount = parseFloat(document.getElementById('amountInput').value);
-      const date = document.getElementById('dateInput').value;
-
-      if (!item || isNaN(amount) || amount <= 0) {
-        showToast('Please enter a valid item and SAR amount', '⚠️');
-        return;
-      }
-
-      const submitBtn = document.getElementById('submitExpenseBtn');
-      submitBtn.disabled = true;
-      submitBtn.classList.add('opacity-60');
-
-      try {
-        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mess_expenses'), {
-          member,
-          item,
-          amount: Math.round(amount * 100) / 100,
-          date,
-          createdAt: Date.now()
-        });
-
-        document.getElementById('itemInput').value = '';
-        document.getElementById('amountInput').value = '';
-        showToast(`Added SAR ${formatSAR(amount)} for ${member}`, '✅');
-      } catch (err) {
-        console.error('Error adding expense:', err);
-        showToast('Error saving expense. Try again.', '❌');
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.classList.remove('opacity-60');
-      }
-    });
-
-    // Modal Open / Close
-    document.getElementById('openSettleBtn').addEventListener('click', openSettlementModal);
-    document.getElementById('bottomSettleBtn').addEventListener('click', openSettlementModal);
-    document.getElementById('closeSettleModalBtn').addEventListener('click', closeSettlementModal);
-    document.getElementById('settlementModal').addEventListener('click', (e) => {
-      if (e.target.id === 'settlementModal') closeSettlementModal();
-    });
-
-    // Copy WhatsApp Summary
-    document.getElementById('copyWhatsappBtn').addEventListener('click', () => {
-      const receipt = buildWhatsAppReceipt();
-      copyTextToClipboard(receipt);
-    });
-
-    // Archive & Start New Month
-    document.getElementById('triggerArchiveBtn').addEventListener('click', async () => {
-      if (expenses.length === 0) {
-        showToast('No active expenses to archive!', '⚠️');
-        return;
-      }
-
-      const label = cycleLabelInput.value.trim() || 'Closed Month';
-      const confirmed = await showConfirm({
-        title: `Archive "${label}" & Reset?`,
-        message: 'This will save the final settlement to Past Months and reset all active balances to SAR 0.00 for the new month.',
-        confirmText: 'Archive & Reset',
-        icon: '🏁'
-      });
-
-      if (!confirmed || !db || !currentUser) return;
-
-      const btn = document.getElementById('triggerArchiveBtn');
-      btn.disabled = true;
-      btn.textContent = 'Archiving...';
-
-      try {
-        const stats = calculateMessStats(expenses);
-        await addDoc(collection(db, 'artifacts', appId, 'public', 'data', 'mess_archives'), {
-          label,
-          totalSpend: stats.totalSpend,
-          perHead: stats.perHead,
-          totals: stats.totals,
-          balances: stats.balances,
-          transfers: stats.transfers,
-          itemCount: expenses.length,
-          archivedAt: Date.now()
-        });
-
-        // Delete all active expenses for the new cycle
-        const deletePromises = expenses.map(exp =>
-          deleteDoc(doc(db, 'artifacts', appId, 'public', 'data', 'mess_expenses', exp.id))
-        );
-        await Promise.all(deletePromises);
-
-        closeSettlementModal();
-        showToast(`${label} archived! New month started.`, '🎉');
-      } catch (err) {
-        console.error('Archive error:', err);
-        showToast('Failed to archive month', '❌');
-      } finally {
-        btn.disabled = false;
-        btn.textContent = 'Archive & Reset';
-      }
-    });
-
-    // ==================== FIREBASE INITIALIZATION & AUTH ====================
-    async function initFirebase() {
-      try {
-        const firebaseConfig = typeof __firebase_config !== 'undefined'
-          ? JSON.parse(__firebase_config)
-          : null;
-
-        if (!firebaseConfig) {
-          syncStatusText.textContent = 'Offline preview mode';
-          renderDashboard();
-          renderArchives();
-          return;
-        }
-
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        db = getFirestore(app);
-
-        // RULE 3: Authenticate BEFORE attaching Firestore listeners
-        if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-          await signInWithCustomToken(auth, __initial_auth_token);
-        } else {
-          await signInAnonymously(auth);
-        }
-
-        onAuthStateChanged(auth, (user) => {
-          currentUser = user;
-          if (!user) return;
-
-          syncDot.classList.remove('bg-amber-400', 'animate-pulse');
-          syncDot.classList.add('bg-emerald-400');
-          syncStatusText.textContent = 'Live group sync active • 4 members';
-
-          // RULE 1 & 2: Simple collection queries on strict public path
-          const expensesRef = collection(db, 'artifacts', appId, 'public', 'data', 'mess_expenses');
-          onSnapshot(expensesRef, (snapshot) => {
-            expenses = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-            renderDashboard();
-          }, (error) => {
-            console.error('Expenses sync error:', error);
-            syncStatusText.textContent = 'Sync interrupted';
-          });
-
-          const archivesRef = collection(db, 'artifacts', appId, 'public', 'data', 'mess_archives');
-          onSnapshot(archivesRef, (snapshot) => {
-            archives = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-            renderArchives();
-          }, (error) => {
-            console.error('Archives sync error:', error);
-          });
-        });
-      } catch (err) {
-        console.error('Firebase init failed:', err);
-        syncStatusText.textContent = 'Connection error';
-      }
-    }
-
-    // Initial render while connecting
-    renderDashboard();
-    initFirebase();
+    loadLocal();
+    renderAll();
+    syncFromCloud(false);
+    setInterval(() => syncFromCloud(false), 8000);
   </script>
 </body>
 </html>
