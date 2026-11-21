@@ -560,14 +560,14 @@
         </div>
       </div>
       <div class="actions-top">
-        <button class="btn-sync" id="btnSync" onclick="syncFromCloud(true)">↻ Sync Now</button>
-        <button class="btn-settle" onclick="openSettleModal()">🧮 Settle Month</button>
+        <button type="button" class="btn-sync" id="btnSync" onclick="syncFromCloud(true)">↻ Sync Now</button>
+        <button type="button" class="btn-settle" onclick="openSettleModal()">🧮 Settle Month</button>
       </div>
     </div>
 
     <div class="tabs">
-      <button class="tab-btn active" id="tabActiveBtn" onclick="switchTab('active')">📊 Active Mess</button>
-      <button class="tab-btn" id="tabPastBtn" onclick="switchTab('past')">📜 Past Months (<span id="pastCount">0</span>)</button>
+      <button type="button" class="tab-btn active" id="tabActiveBtn" onclick="switchTab('active')">📊 Active Mess</button>
+      <button type="button" class="tab-btn" id="tabPastBtn" onclick="switchTab('past')">📜 Past Months (<span id="pastCount">0</span>)</button>
     </div>
 
     <div id="activeView">
@@ -592,7 +592,7 @@
 
       <div class="card-box">
         <div class="section-title" style="margin-bottom: 14px;">Add Mess Expense</div>
-        <form class="form-grid" onsubmit="handleAddExpense(event)">
+        <form class="form-grid" id="expenseForm" onsubmit="handleAddExpense(event)">
           <div>
             <label for="payerSelect">Paid By</label>
             <select id="payerSelect" required>
@@ -632,12 +632,12 @@
     <div class="modal">
       <div class="modal-head">
         <h2>Month-End Settlement (÷ 4)</h2>
-        <button class="btn-close" onclick="closeSettleModal()">✕</button>
+        <button type="button" class="btn-close" onclick="closeSettleModal()">✕</button>
       </div>
       <div id="settleSummaryBody"></div>
       <div class="modal-actions">
-        <button class="btn-copy" onclick="copyWhatsAppSummary()">📋 Copy WhatsApp Summary</button>
-        <button class="btn-archive" onclick="archiveAndResetMonth()">📦 Archive &amp; Reset Month</button>
+        <button type="button" class="btn-copy" onclick="copyWhatsAppSummary()">📋 Copy WhatsApp Summary</button>
+        <button type="button" class="btn-archive" onclick="archiveAndResetMonth()">📦 Archive &amp; Reset Month</button>
       </div>
     </div>
   </div>
@@ -893,7 +893,7 @@
             </div>
             <div class="exp-right">
               <div class="exp-amount">SAR ${formatSar(exp.amount)}</div>
-              <button class="btn-del" onclick="deleteExpense('${escapeHtml(exp.id)}')">Delete</button>
+              <button type="button" class="btn-del" onclick="deleteExpense('${escapeHtml(exp.id)}')">Delete</button>
             </div>
           </div>
         `).join("");
@@ -972,23 +972,23 @@
       `;
 
       const waTransfers = transfers.length
-        ? transfers.map((t) => `• ${t.from} → ${t.to}: SAR ${formatSar(t.amount)}`).join("
-")
+        ? transfers.map((t) => "• " + t.from + " -> " + t.to + ": SAR " + formatSar(t.amount)).join("\n")
         : "• All settled!";
 
-      lastWhatsAppText =
-`🍲 *Langar Mafia Mess Settlement (Riyadh)*
-Total Spend: *SAR ${formatSar(total)}*
-Per Head (÷ 4): *SAR ${formatSar(perHead)}*
-
-*Paid So Far:*
-• Umar: SAR ${formatSar(paidBy.Umar)}
-• Yaseen: SAR ${formatSar(paidBy.Yaseen)}
-• Zaka: SAR ${formatSar(paidBy.Zaka)}
-• Tahir: SAR ${formatSar(paidBy.Tahir)}
-
-*Who Pays Whom:*
-${waTransfers}`;
+      lastWhatsAppText = [
+        "🍲 *Langar Mafia Mess Settlement (Riyadh)*",
+        "Total Spend: *SAR " + formatSar(total) + "*",
+        "Per Head (÷ 4): *SAR " + formatSar(perHead) + "*",
+        "",
+        "*Paid So Far:*",
+        "• Umar: SAR " + formatSar(paidBy.Umar),
+        "• Yaseen: SAR " + formatSar(paidBy.Yaseen),
+        "• Zaka: SAR " + formatSar(paidBy.Zaka),
+        "• Tahir: SAR " + formatSar(paidBy.Tahir),
+        "",
+        "*Who Pays Whom:*",
+        waTransfers
+      ].join("\n");
 
       document.getElementById("settleModal").classList.add("open");
     }
